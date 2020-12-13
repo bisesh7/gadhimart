@@ -1,0 +1,50 @@
+#register {
+  margin-top: 8%;
+}
+
+#signin {
+  margin-top: 14%;
+}
+
+#forgotPassword {
+  margin-top: 14%;
+}
+
+#resetPassword {
+  margin-top: 3%;
+}
+
+#confirmEmail {
+  margin-top: 12%;
+}
+
+.register-signin h3,
+.register-signin h2 {
+  text-transform: capitalize;
+  font-weight: 600;
+}
+
+.register-signin .logo-register {
+  margin-top: 10rem;
+}
+.register-signin .logo-sign-in {
+  margin-top: 5rem;
+}
+
+.register-signin span,
+.register-signin a,
+.register-signin a:hover {
+  font-weight: 600;
+}
+
+.register-signin .invalid {
+  color: crimson;
+}
+.register-signin .valid {
+  color: green;
+}
+
+.register-signin #showHideAnchor,
+.register-signin #showHideAnchor:hover {
+  color: #333;
+}

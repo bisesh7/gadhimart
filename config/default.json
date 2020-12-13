@@ -1,0 +1,8 @@
+{
+  "mongoURI": "mongodb+srv://Bisesh:3aGxKOvtGhcUsAnP@gadhimart.ox7qp.mongodb.net/gadhimart?retryWrites=true&w=majority",
+  "secret": "mySecret2223",
+  "gmailId": "biseshshakya77@gmail.com",
+  "gmailPassword": "58J5vOrcxg27",
+  "API_KEY": "B8BC88528AFA9A34D4FBD35D4A2AF",
+  "ADMIN_KEY": "21D96354D243E8FB33B27F92FCA89"
+}
