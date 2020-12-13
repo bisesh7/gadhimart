@@ -169,11 +169,13 @@ router.post("/createLists", (req, res) => {
         vehicleType: "Motorcycle",
       },
     ])
-      .then(function () {
+      .then(() => {
+        console.log("lists created");
         return res.json({ success: true, msg: "List created." });
       })
-      .catch(function (error) {
-        return res.json({ success: false });
+      .catch((err) => {
+        console.log(err);
+        return res.status(500).json({ success: false });
       });
   });
 });

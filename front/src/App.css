@@ -10,7 +10,8 @@
   src: url("./Bebas_Neue/bebasneue-regular-webfont.woff") format("woff");
 }
 
-.nav-brand {
+.nav-brand,
+.brand {
   font-family: "Bebas_Neue", "Arial", sans-serif;
   font-size: xx-large;
   font-weight: 700;

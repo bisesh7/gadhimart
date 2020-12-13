@@ -266,10 +266,11 @@ const SignIn = (props) => {
                   className="ligtenOnHover"
                   style={{ textDecoration: "none" }}
                 >
-                  <h3>GadhiMart</h3>
+                  <h3 className="brand">
+                    Gadhi<span className="mart">Mart</span>
+                  </h3>
                 </Link>
-                <h3 className="mt-3">Easily find</h3>
-                <h3 className="mt-3">Your next car</h3>
+                <h3 className="mt-3">Easily Find Your Next Car</h3>
               </div>
             </Col>
           </Row>
