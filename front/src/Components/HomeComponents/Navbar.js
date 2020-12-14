@@ -149,7 +149,7 @@ const NavbarComponent = (props) => {
                   </DropdownItem>
                   <DropdownItem
                     onClick={() => {
-                      props.history.push("/advice");
+                      props.history.push("/help/safety#quickSafetyTips");
                     }}
                   >
                     {" "}
