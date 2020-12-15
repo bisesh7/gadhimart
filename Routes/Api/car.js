@@ -519,7 +519,7 @@ router.post("/", ensureAuthenticated, (req, res) => {
                 .then((carAd) => {
                   // Delete tempfolder saved in the database
                   TempFolders.find(
-                    { uniqueId: [carDetails.uniqueId] },
+                    { uniqueId: carDetails.uniqueId },
                     (err, listings) => {
                       if (err) {
                         console.log(err);
@@ -573,61 +573,6 @@ router.post("/", ensureAuthenticated, (req, res) => {
                       }
                     }
                   );
-
-                  // TempFolders.$where(
-                  //   `this.uniqueId.indexOf('${carDetails.uniqueId}') > '-1'`
-                  // ).exec((err, listings) => {
-                  //   if (err) {
-                  //     console.log(err);
-                  //     return res.status(500).json({
-                  //       success: false,
-                  //       msg: "Error while deleting the tempfolder",
-                  //     });
-                  //   }
-                  //   // If the listing is empty there is error as there should obviously be one
-                  //   if (listings.length === 0) {
-                  //     return res.status(500).json({
-                  //       success: false,
-                  //       msg: "Error while deleting the tempfolder",
-                  //     });
-                  //   } else {
-                  //     // Since listings can containg other folders used by the user
-                  //     listings.forEach((listing) => {
-                  //       if (listing.uniqueId.length >= 2) {
-                  //         listing.uniqueId.splice(
-                  //           listing.uniqueId.indexOf(carDetails.uniqueId),
-                  //           1
-                  //         );
-                  //         listing
-                  //           .save()
-                  //           .then(() => {
-                  //             return res.json({ success: true });
-                  //           })
-                  //           .catch((err) => {
-                  //             console.log(err);
-                  //             return res.status(500).json({
-                  //               success: false,
-                  //               msg: "Error while deleting the tempfolder",
-                  //             });
-                  //           });
-                  //       } else if (listing.uniqueId.length === 1) {
-                  //         listing
-                  //           .remove()
-                  //           .then(() => {
-                  //             console.log("temp deleted");
-                  //             return res.json({ success: true });
-                  //           })
-                  //           .catch((err) => {
-                  //             console.log(err);
-                  //             return res.status(500).json({
-                  //               success: false,
-                  //               msg: "Error while deleting the tempfolder",
-                  //             });
-                  //           });
-                  //       }
-                  //     });
-                  //   }
-                  // });
                 })
                 .catch((err) => {
                   return res

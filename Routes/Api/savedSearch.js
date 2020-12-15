@@ -746,18 +746,35 @@ router.post("/getSavedCarSearches", ensureAuthenticated, (req, res) => {
     return res.status(400).json({ success: false, message: "Error occurred!" });
   }
 
-  SavedSearch.$where(
-    `this.vehicleType === 'Car' && 
-    this.userIds.indexOf('${req.user._id}') > -1
-    `
-  ).exec((err, listings) => {
-    if (err) {
-      console.log(err);
-      return res.status(500).json({ success: false, msg: "Server error" });
-    }
+  console.log(req.user._id);
 
-    return res.json({ success: true, listings });
-  });
+  SavedSearch.find(
+    {
+      vehicleType: "Car",
+      userIds: req.user._id,
+    },
+    (err, listings) => {
+      if (err) {
+        console.log(err);
+        return res.status(500).json({ success: false, msg: "Server error" });
+      }
+
+      return res.json({ success: true, listings });
+    }
+  );
+
+  // SavedSearch.$where(
+  //   `this.vehicleType === 'Car' &&
+  //   this.userIds.indexOf('${req.user._id}') > -1
+  //   `
+  // ).exec((err, listings) => {
+  //   if (err) {
+  //     console.log(err);
+  //     return res.status(500).json({ success: false, msg: "Server error" });
+  //   }
+
+  //   return res.json({ success: true, listings });
+  // });
 });
 
 // @route   POST /api/savedSearch/getSavedMotorcycleSearches
