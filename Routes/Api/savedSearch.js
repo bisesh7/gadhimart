@@ -507,16 +507,19 @@ router.post("/new", ensureAuthenticated, (req, res) => {
       }
 
       // Since make and model are not in parseQuery we add it here
-      savedCarFilters.carMakeSelected = make;
-      savedCarFilters.carModelSelected = model;
+      savedCarFilters.carMakeSelected = make.toUpperCase();
+      savedCarFilters.carModelSelected = model.toUpperCase();
 
-      SavedSearch.$where(
-        `this.vehicleType === 'Car' &&
-        this.filters.carMakeSelected.toUpperCase() === '${make.toUpperCase()}' &&
-        this.filters.carModelSelected.toUpperCase() === '${model.toUpperCase()}'`
-      ).exec((err, listings) => {
-        return respond(err, listings, savedCarFilters);
-      });
+      SavedSearch.find(
+        {
+          vehicleType: "Car",
+          "filters.carMakeSelected": make.toUpperCase(),
+          "filters.carModelSelected": model.toUpperCase(),
+        },
+        (err, listings) => {
+          return respond(err, listings, savedCarFilters);
+        }
+      );
 
       break;
 
@@ -617,18 +620,20 @@ router.post("/new", ensureAuthenticated, (req, res) => {
       }
 
       // Since make and model are not in parseQuery we add it here
-      savedMotorcycleFilters.make = make;
-      savedMotorcycleFilters.model = model;
+      savedMotorcycleFilters.make = make.toUpperCase();
+      savedMotorcycleFilters.model = model.toUpperCase();
 
       // Select all the listings with matching make and model and then filter it in respond
-      SavedSearch.$where(
-        `this.vehicleType === 'Motorcycle' &&
-        this.filters.make.toUpperCase() === '${make.toUpperCase()}' &&
-        this.filters.model.toUpperCase() === '${model.toUpperCase()}'`
-      ).exec((err, listings) => {
-        return respond(err, listings, savedMotorcycleFilters);
-      });
-
+      SavedSearch.find(
+        {
+          vehicleType: "Motorcycle",
+          "filters.make": make.toUpperCase(),
+          "filters.model": model.toUpperCase(),
+        },
+        (err, listings) => {
+          return respond(err, listings, savedMotorcycleFilters);
+        }
+      );
       break;
 
     default:
@@ -955,100 +960,75 @@ router.post("/matchFiltersWithNewCar", ensureAuthenticated, (req, res) => {
 
   // Select all the lisitings with matching make and model and then filter it in respond
   if (make === "Other") {
-    SavedSearch.$where(
-      `this.vehicleType === 'Car' && 
-      (this.filters.carMakeSelected.toUpperCase() === '${make.toUpperCase()}' ||
-      this.filters.carMakeSelected === 'a')`
-    ).exec((err, listings) => {
-      return respond(err, listings);
-    });
-  } else if (make !== "Other" && model === "Other") {
-    SavedSearch.$where(
-      `this.vehicleType === 'Car' && 
-      this.filters.carMakeSelected.toUpperCase() === '${make.toUpperCase()}' &&
-      this.filters.carModelSelected.toUpperCase() === '${model.toUpperCase()}'`
-    ).exec((err, listingsWithMakeAndModelFilter) => {
-      if (err) {
-        console.log(err);
-        return res.status(500).json({ success: false, msg: "Server error" });
+    SavedSearch.find(
+      {
+        vehicleType: "Car",
+        "filters.carMakeSelected": {
+          $in: [make.toUpperCase(), "A"],
+        },
+      },
+      (err, listings) => {
+        if (err) {
+          console.log(err);
+        }
+        console.log(listings);
+        return respond(err, listings);
       }
-      // Checking for any model filter
-      SavedSearch.$where(
-        `this.vehicleType === 'Car' && 
-        this.filters.carMakeSelected.toUpperCase() === '${make.toUpperCase()}' &&
-        this.filters.carModelSelected === 'a'`
-      ).exec((err, listingsWithMakeAndAnyModelFilter) => {
+    );
+  } else if (
+    (make !== "Other" && model === "Other") ||
+    (make !== "Other" && model !== "Other")
+  ) {
+    SavedSearch.find(
+      {
+        vehicleType: "Car",
+        "filter.carMakeSelected": make.toUpperCase(),
+        "filter.carModelSelected": model.toUpperCase(),
+      },
+      (err, listingsWithMakeAndModelFilter) => {
         if (err) {
           console.log(err);
           return res.status(500).json({ success: false, msg: "Server error" });
         }
 
-        // Checking for any make filter since it satisfies with the new car
-        SavedSearch.$where(
-          `this.vehicleType === 'Car' && 
-        this.filters.carMakeSelected === 'a'`
-        ).exec((err, listingsWithAllMakesFilter) => {
-          if (err) {
-            console.log(err);
-            return res
-              .status(500)
-              .json({ success: false, msg: "Server error" });
-          }
+        SavedSearch.find(
+          {
+            vehicleType: "Car",
+            "filter.carMakeSelected": make.toUpperCase(),
+            "filter.carModelSelected": "A",
+          },
+          (err, listingsWithMakeAndAnyModelFilter) => {
+            if (err) {
+              console.log(err);
+              return res
+                .status(500)
+                .json({ success: false, msg: "Server error" });
+            }
 
-          return respond(err, [
-            ...listingsWithMakeAndModelFilter,
-            ...listingsWithMakeAndAnyModelFilter,
-            ...listingsWithAllMakesFilter,
-          ]);
-        });
-      });
-    });
-  } else if (make !== "Other" && model !== "Other") {
-    console.log("Make and model is given.");
-    SavedSearch.$where(
-      `this.vehicleType === 'Car' && 
-      this.filters.carMakeSelected.toUpperCase() === '${make.toUpperCase()}' &&
-      this.filters.carModelSelected.toUpperCase() === '${model.toUpperCase()}'`
-    ).exec((err, listingsWithMakeAndModelFilter) => {
-      if (err) {
-        console.log(err);
-        return res.status(500).json({ success: false, msg: "Server error" });
+            SavedSearch.find(
+              {
+                vehicleType: "Car",
+                "filter.carMakeSelected": "A",
+              },
+              (err, listingsWithAllMakesFilter) => {
+                if (err) {
+                  console.log(err);
+                  return res
+                    .status(500)
+                    .json({ success: false, msg: "Server error" });
+                }
+
+                return respond(err, [
+                  ...listingsWithMakeAndModelFilter,
+                  ...listingsWithMakeAndAnyModelFilter,
+                  ...listingsWithAllMakesFilter,
+                ]);
+              }
+            );
+          }
+        );
       }
-      console.log(
-        "listingsWithMakeAndModelFilter",
-        listingsWithMakeAndModelFilter
-      );
-      // Checking for any model filter
-      SavedSearch.$where(
-        `this.vehicleType === 'Car' && 
-        this.filters.carMakeSelected.toUpperCase() === '${make.toUpperCase()}' &&
-        this.filters.carModelSelected === 'a'`
-      ).exec((err, listingsWithMakeAndAnyModelFilter) => {
-        if (err) {
-          console.log(err);
-          return res.status(500).json({ success: false, msg: "Server error" });
-        }
-
-        // Checking for any make filter since it satisfies with the new car
-        SavedSearch.$where(
-          `this.vehicleType === 'Car' && 
-        this.filters.carMakeSelected === 'a'`
-        ).exec((err, listingsWithAllMakesFilter) => {
-          if (err) {
-            console.log(err);
-            return res
-              .status(500)
-              .json({ success: false, msg: "Server error" });
-          }
-
-          return respond(err, [
-            ...listingsWithMakeAndModelFilter,
-            ...listingsWithMakeAndAnyModelFilter,
-            ...listingsWithAllMakesFilter,
-          ]);
-        });
-      });
-    });
+    );
   } else {
     return res.status(400).json({ success: false, msg: "Error occurred." });
   }
@@ -1190,30 +1170,32 @@ router.post(
 
     // Select all the lisitings with matching make and model and then filter it in respond
     if (make === "Other") {
-      SavedSearch.$where(
-        `this.vehicleType === 'Motorcycle' &&
-        (this.filters.make.toUpperCase() === '${make.toUpperCase()}' ||
-        this.filters.make === 'a')`
-      ).exec((err, listings) => {
-        return respond(err, listings);
-      });
-    } else if (make !== "Other" && model === "Other") {
-      SavedSearch.$where(
-        `this.vehicleType === 'Motorcycle' && 
-        this.filters.make.toUpperCase() === '${make.toUpperCase()}' &&
-      this.filters.model.toUpperCase() === '${model.toUpperCase()}'`
-      ).exec((err, listingsWithMakeAndModelFilter) => {
-        if (err) {
-          console.log(err);
-          return res.status(500).json({ success: false, msg: "Server error" });
+      SavedSearch.find(
+        {
+          vehicleType: "Motorcycle",
+          "filters.make": {
+            $in: [make.toUpperCase(), "A"],
+          },
+        },
+        (err, listings) => {
+          if (err) {
+            console.log(err);
+          }
+          console.log(listings);
+          return respond(err, listings);
         }
-
-        // Checking for any model filter
-        SavedSearch.$where(
-          `this.vehicleType === 'Motorcycle' &&
-          this.filters.make.toUpperCase() === '${make.toUpperCase()}' &&
-        this.filters.model === 'a'`
-        ).exec((err, listingsWithMakeAndAnyModelFilter) => {
+      );
+    } else if (
+      (make !== "Other" && model === "Other") ||
+      (make !== "Other" && model !== "Other")
+    ) {
+      SavedSearch.find(
+        {
+          vehicleType: "Motorcycle",
+          "filter.make": make.toUpperCase(),
+          "filter.model": model.toUpperCase(),
+        },
+        (err, listingsWithMakeAndModelFilter) => {
           if (err) {
             console.log(err);
             return res
@@ -1221,72 +1203,44 @@ router.post(
               .json({ success: false, msg: "Server error" });
           }
 
-          // Checking for any make filter since it satisfies with the new car
-          SavedSearch.$where(
-            `this.vehicleType === 'Motorcycle' &&
-          this.filters.make === 'a'`
-          ).exec((err, listingsWithAllMakesFilter) => {
-            if (err) {
-              console.log(err);
-              return res
-                .status(500)
-                .json({ success: false, msg: "Server error" });
-            }
+          SavedSearch.find(
+            {
+              vehicleType: "Motorcycle",
+              "filter.make": make.toUpperCase(),
+              "filter.model": "A",
+            },
+            (err, listingsWithMakeAndAnyModelFilter) => {
+              if (err) {
+                console.log(err);
+                return res
+                  .status(500)
+                  .json({ success: false, msg: "Server error" });
+              }
 
-            return respond(err, [
-              ...listingsWithMakeAndModelFilter,
-              ...listingsWithMakeAndAnyModelFilter,
-              ...listingsWithAllMakesFilter,
-            ]);
-          });
-        });
-      });
-    } else if (make !== "Other" && model !== "Other") {
-      SavedSearch.$where(
-        `this.vehicleType === 'Motorcycle' &&
-        this.filters.make.toUpperCase() === '${make.toUpperCase()}' &&
-      this.filters.model.toUpperCase() === '${model.toUpperCase()}'`
-      ).exec((err, listingsWithMakeAndModelFilter) => {
-        if (err) {
-          console.log(err);
-          return res.status(500).json({ success: false, msg: "Server error" });
+              SavedSearch.find(
+                {
+                  vehicleType: "Motorcycle",
+                  "filter.make": "A",
+                },
+                (err, listingsWithAllMakesFilter) => {
+                  if (err) {
+                    console.log(err);
+                    return res
+                      .status(500)
+                      .json({ success: false, msg: "Server error" });
+                  }
+
+                  return respond(err, [
+                    ...listingsWithMakeAndModelFilter,
+                    ...listingsWithMakeAndAnyModelFilter,
+                    ...listingsWithAllMakesFilter,
+                  ]);
+                }
+              );
+            }
+          );
         }
-        // Checking for any model filter
-        SavedSearch.$where(
-          `this.vehicleType === 'Motorcycle' &&
-          this.filters.make.toUpperCase() === '${make.toUpperCase()}' &&
-        this.filters.model === 'a'`
-        ).exec((err, listingsWithMakeAndAnyModelFilter) => {
-          if (err) {
-            console.log(err);
-            return res
-              .status(500)
-              .json({ success: false, msg: "Server error" });
-          }
-
-          // Checking for any make filter since it satisfies with the new car
-          SavedSearch.$where(
-            `this.vehicleType === 'Motorcycle' &&
-          this.filters.make === 'a'`
-          ).exec((err, listingsWithAllMakesFilter) => {
-            if (err) {
-              console.log(err);
-              return res
-                .status(500)
-                .json({ success: false, msg: "Server error" });
-            }
-            console.log(
-              "listingsWithAllMakesFilter",
-              listingsWithAllMakesFilter
-            );
-            return respond(err, [
-              ...listingsWithMakeAndModelFilter,
-              ...listingsWithMakeAndAnyModelFilter,
-              ...listingsWithAllMakesFilter,
-            ]);
-          });
-        });
-      });
+      );
     } else {
       return res.status(400).json({ success: false, msg: "Error occurred." });
     }

@@ -613,17 +613,14 @@ router.post("/getNotifications", ensureAuthenticated, (req, res) => {
     return res.status(400).json({ message: "Error occrurred", success: false });
   }
 
-  Notification.$where(`this.user.indexOf('${req.user._id}') > -1`).exec(
-    (err, notifications) => {
-      if (err) {
-        console.log(err);
-        return res
-          .status(500)
-          .json({ message: "Server error", success: false });
-      }
-      return res.json({ success: true, notifications });
+  Notification.find({ user: userId }, (err, notifications) => {
+    if (err) {
+      console.log(err);
+      return res.status(500).json({ message: "Server error", success: false });
     }
-  );
+
+    return res.json({ success: true, notifications });
+  });
 });
 
 // @route   POST /api/notification/delete
