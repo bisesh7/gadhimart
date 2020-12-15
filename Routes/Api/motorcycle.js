@@ -1368,24 +1368,29 @@ router.post("/getListingByIDs", ensureAuthenticated, (req, res) => {
     return res.status(400).json({ message: "Error occurred", success: false });
   }
 
-  // Creating a query dynamically since there is a list of motorcycles that is saved by the user.
-  let query = "";
+  // Creating a list of object ids
+  let objectIds = [];
   vehicleIds.forEach((id) => {
-    let newQuery = `this._id == '${id}' ||`;
-    query += newQuery;
+    objectIds.push(mongoose.Types.ObjectId(id));
   });
 
-  // The last query will cause error if it contain || so removing it
-  query = query.slice(0, -3);
+  Motorcycle.find(
+    {
+      _id: {
+        $in: objectIds,
+      },
+    },
+    (err, documents) => {
+      if (err) {
+        console.log(err);
+        return res
+          .status(500)
+          .json({ message: "Server Error", success: false });
+      }
 
-  Motorcycle.$where(query).exec((err, documents) => {
-    if (err) {
-      console.log(err);
-      return res.status(500).json({ message: "Server Error", success: false });
+      return res.json({ success: true, savedMotorcycles: documents });
     }
-
-    return res.json({ success: true, savedMotorcycles: documents });
-  });
+  );
 });
 
 // @route   GET /api/motorcycle/
