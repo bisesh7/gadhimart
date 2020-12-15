@@ -682,12 +682,10 @@ router.post("/update", ensureAuthenticated, (req, res) => {
       Car.findById(databaseID)
         .then((listing) => {
           if (listing.userId != req.user._id) {
-            return res
-              .status(403)
-              .json({
-                msg: "Please use the website correctly!",
-                success: true,
-              });
+            return res.status(403).json({
+              msg: "Please use the website correctly!",
+              success: true,
+            });
           }
 
           // Update the car details in the database
