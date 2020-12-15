@@ -65,11 +65,13 @@ const SavedMotorcycleSearches = (props) => {
                 <Row>
                   <Col sm="11">
                     <ListGroupItemHeading className="text-muted">
-                      {listing.filters.make === "a"
-                        ? `All Makes`
-                        : listing.filters.model === "a"
-                        ? `${listing.filters.make}`
-                        : `${listing.filters.make} ${listing.filters.model}`}
+                      <strong>
+                        {listing.filters.make === "A"
+                          ? `All Makes`
+                          : listing.filters.model === "A"
+                          ? `${listing.filters.make}`
+                          : `${listing.filters.make} ${listing.filters.model}`}
+                      </strong>
                     </ListGroupItemHeading>
                   </Col>
                   <Col sm="1">

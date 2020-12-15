@@ -9,7 +9,6 @@ import {
   ListGroupItem,
   ListGroupItemHeading,
   ListGroupItemText,
-  Collapse,
 } from "reactstrap";
 import AuthNavbar from "../AuthNavbar";
 import {
@@ -71,11 +70,13 @@ const SavedCarSearches = (props) => {
                 <Row>
                   <Col sm="11">
                     <ListGroupItemHeading className="text-muted">
-                      {listing.filters.carMakeSelected === "a"
-                        ? `All Makes`
-                        : listing.filters.carModelSelected === "a"
-                        ? `${listing.filters.carMakeSelected}`
-                        : `${listing.filters.carMakeSelected} ${listing.filters.carModelSelected}`}
+                      <strong>
+                        {listing.filters.carMakeSelected === "A"
+                          ? `All Makes`
+                          : listing.filters.carModelSelected === "A"
+                          ? `${listing.filters.carMakeSelected}`
+                          : `${listing.filters.carMakeSelected} ${listing.filters.carModelSelected}`}
+                      </strong>
                     </ListGroupItemHeading>
                   </Col>
                   <Col sm="1">
