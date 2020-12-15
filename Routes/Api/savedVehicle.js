@@ -125,16 +125,23 @@ router.post("/getAllSavedCars", ensureAuthenticated, (req, res) => {
     return res.status(400).json({ message: "Error Occurred", success: false });
   }
 
-  SavedVehicles.$where(
-    `this.userIds.indexOf('${req.user.id}') > -1 &&
-        this.vehicleType === 'Car'`
-  ).exec((err, savedCars) => {
-    if (err) {
-      console.log(err);
-      return res.status(500).json({ message: "Server error", success: false });
+  SavedVehicles.find(
+    {
+      userIds: req.user.id,
+      vehicleType: "Car",
+    },
+    (err, savedCars) => {
+      if (err) {
+        console.log(err);
+        return res
+          .status(500)
+          .json({ message: "Server error", success: false });
+      }
+
+      console.log(savedCars);
+      return res.json({ success: true, savedCars });
     }
-    return res.json({ success: true, savedCars });
-  });
+  );
 });
 
 // @route   POST /api/savedVehicles/getAllSavedMotorcycles
@@ -151,16 +158,21 @@ router.post("/getAllSavedMotorcycles", ensureAuthenticated, (req, res) => {
     return res.status(400).json({ message: "Error Occurred", success: false });
   }
 
-  SavedVehicles.$where(
-    `this.vehicleType === 'Motorcycle' &&
-    this.userIds.indexOf('${req.user.id}') > -1`
-  ).exec((err, savedMotorcycles) => {
-    if (err) {
-      console.log(err);
-      return res.status(500).json({ message: "Server error", success: false });
+  SavedVehicles.find(
+    {
+      vehicleType: "Motorcycle",
+      userIds: req.user.id,
+    },
+    (err, savedMotorcycles) => {
+      if (err) {
+        console.log(err);
+        return res
+          .status(500)
+          .json({ message: "Server error", success: false });
+      }
+      return res.json({ success: true, savedMotorcycles });
     }
-    return res.json({ success: true, savedMotorcycles });
-  });
+  );
 });
 
 // @route   POST /api/savedVehicles/unSave
