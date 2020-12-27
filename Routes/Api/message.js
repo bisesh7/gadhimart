@@ -95,40 +95,42 @@ router.post("/", ensureAuthenticated, (req, res) => {
       });
   };
 
-  ChatSession.$where(
-    `this.listingId === '${listingId}' &&
-    this.usersInvolved.indexOf('${from}') > '-1' &&
-    this.usersInvolved.indexOf('${to}') > '-1'`
-  ).exec((err, listings) => {
-    if (err) {
-      console.log(err);
-      return res.status(500).json({ success: false });
-    }
+  ChatSession.find(
+    {
+      listingId,
+      usersInvolved: { $all: [from, to] },
+    },
+    (err, listings) => {
+      if (err) {
+        console.log(err);
+        return res.status(500).json({ success: false });
+      }
 
-    if (listings.length === 0) {
-      // if chatSession is null, this is the first message ever so we use the uniqueid
-      // sent from client
-      createNewChatSession(uniqueId);
-    } else if (listings.length === 1) {
-      listings[0].messages.push({
-        sender: from,
-        reciever: to,
-        date: new Date(),
-        seenDetail: { date: null, seen: false },
-        message: message,
-        id: uuid(),
-      });
-      listings[0]
-        .save()
-        .then(() => {
-          return res.json({ success: true });
-        })
-        .catch((err) => {
-          console.log(err);
-          return res.status(500).json({ success: false });
+      if (listings.length === 0) {
+        // if chatSession is null, this is the first message ever so we use the uniqueid
+        // sent from client
+        createNewChatSession(uniqueId);
+      } else if (listings.length === 1) {
+        listings[0].messages.push({
+          sender: from,
+          reciever: to,
+          date: new Date(),
+          seenDetail: { date: null, seen: false },
+          message: message,
+          id: uuid(),
         });
+        listings[0]
+          .save()
+          .then(() => {
+            return res.json({ success: true });
+          })
+          .catch((err) => {
+            console.log(err);
+            return res.status(500).json({ success: false });
+          });
+      }
     }
-  });
+  );
 });
 
 // @route   POST /api/message/getAllMessages
@@ -143,15 +145,18 @@ router.post("/getAllMessages", ensureAuthenticated, (req, res) => {
       .json({ msg: "Please provide valid credentials", success: false });
   }
 
-  ChatSession.$where(
-    `this.usersInvolved.indexOf('${req.user._id}') > '-1'`
-  ).exec((err, chatSessions) => {
-    if (err) {
-      return res.status(500).json({ msg: "Server error", success: false });
-    }
+  ChatSession.find(
+    {
+      usersInvolved: req.user.id,
+    },
+    (err, chatSessions) => {
+      if (err) {
+        return res.status(500).json({ msg: "Server error", success: false });
+      }
 
-    return res.json({ chatSessions, success: true });
-  });
+      return res.json({ chatSessions, success: true });
+    }
+  );
 });
 
 // @route   POST /api/message/getMessage

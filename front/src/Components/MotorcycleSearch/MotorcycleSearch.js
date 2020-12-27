@@ -52,7 +52,9 @@ const MotorcycleSearch = (props) => {
     if (make === "a") {
       return true;
     }
-    return motorcycles.some((motorcycle) => motorcycle.make === make);
+    return motorcycles.some(
+      (motorcycle) => motorcycle.make.toUpperCase() === make.toUpperCase()
+    );
   };
 
   // Check whether the model selected is within the car list.
@@ -61,7 +63,9 @@ const MotorcycleSearch = (props) => {
       return true;
     }
 
-    let makes = motorcycles.find((motorcycle) => motorcycle.make === make);
+    let makes = motorcycles.find(
+      (motorcycle) => motorcycle.make.toUpperCase() === make.toUpperCase()
+    );
 
     if (typeof makes === "undefined") {
       return false;
@@ -72,7 +76,8 @@ const MotorcycleSearch = (props) => {
     }
 
     return makes.models.some(
-      (motorcycleModel) => motorcycleModel.model === model
+      (motorcycleModel) =>
+        motorcycleModel.model.toUpperCase() === model.toUpperCase()
     );
   };
 

@@ -76,7 +76,9 @@ const removeUnmatchedListings = (listings, listingEmpty, savedFilters) => {
   if (!listingEmpty) {
     listings.forEach((listing, i) => {
       for (const key in listing.filters) {
-        if (listing.filters[key] !== savedFilters[key]) {
+        if (
+          listing.filters[key].toUpperCase() !== savedFilters[key].toUpperCase()
+        ) {
           listings.splice(i, 1);
           break;
         }
@@ -671,6 +673,9 @@ router.post("/checkSavedSearch", ensureAuthenticated, (req, res) => {
       listingEmpty,
       filters
     );
+
+    console.log(listingsWithDetail);
+
     listings = listingsWithDetail.listings;
     listingEmpty = listingsWithDetail.listingEmpty;
 
@@ -701,13 +706,16 @@ router.post("/checkSavedSearch", ensureAuthenticated, (req, res) => {
           .json({ success: false, message: "Error occurred!" });
       }
 
-      SavedSearch.$where(
-        `this.vehicleType === 'Car' &&
-        this.filters.carMakeSelected.toUpperCase() === '${carMakeSelected.toUpperCase()}' &&
-        this.filters.carModelSelected.toUpperCase() === '${carModelSelected.toUpperCase()}'`
-      ).exec((err, listings) => {
-        return respond(err, listings);
-      });
+      SavedSearch.find(
+        {
+          vehicleType: "Car",
+          "filters.carMakeSelected": carMakeSelected.toUpperCase(),
+          "filters.carModelSelected": carModelSelected.toUpperCase(),
+        },
+        (err, listings) => {
+          return respond(err, listings);
+        }
+      );
 
       break;
 
@@ -721,14 +729,17 @@ router.post("/checkSavedSearch", ensureAuthenticated, (req, res) => {
           .json({ success: false, message: "Error occurred!" });
       }
 
-      // Select all the listings with matching make and model and then filter it in respond
-      SavedSearch.$where(
-        `this.vehicleType === 'Motorcycle' &&
-        this.filters.make.toUpperCase() === '${make.toUpperCase()}' &&
-        this.filters.model.toUpperCase() === '${model.toUpperCase()}'`
-      ).exec((err, listings) => {
-        return respond(err, listings);
-      });
+      SavedSearch.find(
+        {
+          vehicleType: "Motorcycle",
+          "filters.make": make.toUpperCase(),
+          "filters.model": model.toUpperCase(),
+        },
+        (err, listings) => {
+          return respond(err, listings);
+        }
+      );
+
       break;
 
     default:

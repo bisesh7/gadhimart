@@ -151,8 +151,8 @@ const SavedMotorcycleSearches = (props) => {
   }, []);
 
   const handleShowResult = (listing) => {
-    let make = listing.filters["make"];
-    let model = listing.filters["model"];
+    let make = listing.filters["make"].toLowerCase();
+    let model = listing.filters["model"].toLowerCase();
     let qs = createQSFromFilters(listing.filters, "Motorcycle");
 
     props.history.push(`/motorcycle/${make}/${model}${qs}`);

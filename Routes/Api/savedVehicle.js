@@ -4,6 +4,7 @@ const { ensureAuthenticated } = require("../../config/auth");
 
 const Car = require("../../models/Car");
 const Motorcycle = require("../../models/Motorcycle");
+const SavedSearch = require("../../models/SavedSearch");
 const SavedVehicles = require("../../models/SavedVehicles");
 
 // @route   POST /api/savedVehicles/newSave
@@ -277,6 +278,8 @@ router.post("/unSave", ensureAuthenticated, (req, res) => {
 router.post("/checkSavedVehicle", ensureAuthenticated, (req, res) => {
   const { listingId, userId, valid, type } = req.body;
 
+  console.log("Checking saved vehicle", req.body);
+
   if (
     typeof valid === "undefined" ||
     typeof listingId === "undefined" ||
@@ -289,21 +292,44 @@ router.post("/checkSavedVehicle", ensureAuthenticated, (req, res) => {
   }
 
   //   Here where is use as we need to check inside a list in a document property
-  SavedVehicles.$where(
-    `this.vehicleId === '${listingId}' &&
-        this.vehicleType === '${type}' &&
-        this.userIds.indexOf('${req.user.id}') > -1`
-  ).exec((err, savedCars) => {
-    if (err) {
-      console.log(err);
-      return res.status(500).json({ message: "Server error", success: false });
+  SavedVehicles.find(
+    {
+      vehicleId: listingId,
+      vehicleType: type,
+      userIds: userId,
+    },
+    (err, savedCars) => {
+      if (err) {
+        console.log(err);
+        return res
+          .status(500)
+          .json({ message: "Server error", success: false });
+      }
+      if (savedCars.length === 0) {
+        console.log(savedCars);
+        return res.json({ saved: false, success: true });
+      } else if (savedCars.length === 1) {
+        console.log(savedCars);
+        return res.json({ saved: true, success: true });
+      }
     }
-    if (savedCars.length === 0) {
-      return res.json({ saved: false, success: true });
-    } else if (savedCars.length === 1) {
-      return res.json({ saved: true, success: true });
-    }
-  });
+  );
+
+  // SavedVehicles.$where(
+  //   `this.vehicleId === '${listingId}' &&
+  //       this.vehicleType === '${type}' &&
+  //       this.userIds.indexOf('${req.user.id}') > -1`
+  // ).exec((err, savedCars) => {
+  //   if (err) {
+  //     console.log(err);
+  //     return res.status(500).json({ message: "Server error", success: false });
+  //   }
+  //   if (savedCars.length === 0) {
+  //     return res.json({ saved: false, success: true });
+  //   } else if (savedCars.length === 1) {
+  //     return res.json({ saved: true, success: true });
+  //   }
+  // });
 });
 
 // @route   POST /api/savedVehicles/delete

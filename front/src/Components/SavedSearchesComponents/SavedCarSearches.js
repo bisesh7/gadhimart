@@ -45,8 +45,8 @@ const SavedCarSearches = (props) => {
   const [deleting, setDeleting] = useState(false);
 
   const handleShowResult = (listing) => {
-    let make = listing.filters["carMakeSelected"];
-    let model = listing.filters["carModelSelected"];
+    let make = listing.filters["carMakeSelected"].toLowerCase();
+    let model = listing.filters["carModelSelected"].toLowerCase();
     let qs = createQSFromFilters(listing.filters, "Car");
 
     props.history.push(`/cars/${make}/${model}${qs}`);

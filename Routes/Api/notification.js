@@ -683,7 +683,10 @@ router.post("/deleteAll", ensureAuthenticated, (req, res) => {
     return res.status(400).json({ message: "Error Occurred", success: false });
   }
 
-  Notification.$where(`this.user.indexOf('${req.user._id}') > -1`).exec(
+  Notification.find(
+    {
+      user: req.user.id,
+    },
     (err, notifications) => {
       if (err || notifications.length === 0) {
         console.log(err);

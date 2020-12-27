@@ -52,7 +52,7 @@ const CarSearch = (props) => {
     if (make === "a") {
       return true;
     }
-    return cars.some((car) => car.make === make);
+    return cars.some((car) => car.make.toUpperCase() === make.toUpperCase());
   };
 
   // Check whether the model selected is within the car list.
@@ -61,7 +61,9 @@ const CarSearch = (props) => {
       return true;
     }
 
-    let carMakeObject = cars.find((car) => car.make === make);
+    let carMakeObject = cars.find(
+      (car) => car.make.toUpperCase() === make.toUpperCase()
+    );
 
     if (typeof carMakeObject === "undefined") {
       return false;
@@ -71,7 +73,9 @@ const CarSearch = (props) => {
       return true;
     }
 
-    return carMakeObject.models.some((carModel) => carModel.model === model);
+    return carMakeObject.models.some(
+      (carModel) => carModel.model.toUpperCase() === model.toUpperCase()
+    );
   };
 
   const error = () => {

@@ -1424,25 +1424,6 @@ router.post("/getListingByIDs", ensureAuthenticated, (req, res) => {
       return res.json({ success: true, savedCars: docs });
     }
   );
-
-  // // Creating a query dynamically since there is a list of cars that is saved by the user.
-  // let query = "";
-  // vehicleIds.forEach((id) => {
-  //   let newQuery = `this._id == '${id}' ||`;
-  //   query += newQuery;
-  // });
-
-  // // The last query will cause error if it contain || so removing it
-  // query = query.slice(0, -3);
-
-  // Car.$where(query).exec((err, documents) => {
-  //   if (err) {
-  //     console.log(err);
-  //     return res.status(500).json({ message: "Server Error", success: false });
-  //   }
-
-  //   return res.json({ success: true, savedCars: documents });
-  // });
 });
 
 // @route   GET /api/car/
