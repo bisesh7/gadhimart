@@ -5,12 +5,15 @@ import "@brainhubeu/react-carousel/lib/style.css";
 import axios from "axios";
 import backButtonSVG from "../../icons/back.svg";
 import nextButtonSVG from "../../icons/next.svg";
+import { AuthContext } from "../../Contexts/AuthContext";
+import { useContext } from "react";
 
 const PopularListings = (props) => {
   const [vehicleCards, setVehicleCards] = useState([]);
   const [hideComponent, setHideComponent] = useState(true);
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   const [windowSize, setWindowSize] = useState(null);
+  const { auth } = useContext(AuthContext);
 
   useEffect(() => {
     axios
@@ -36,12 +39,15 @@ const PopularListings = (props) => {
                     }
                   )
                   .then((response) => {
-                    // do something with response
-                    vehicles.push({
-                      vehicleType: "Car",
-                      vehicle: response.data.listing.carDetails,
-                      vehicleId: popularListings[i].vehicleId,
-                    });
+                    if (auth.user.id !== response.data.listing.userId) {
+                      // if the user is logged in and the popular vehicle is of the user then
+                      // we need to discard this popular vehicle
+                      vehicles.push({
+                        vehicleType: "Car",
+                        vehicle: response.data.listing.carDetails,
+                        vehicleId: popularListings[i].vehicleId,
+                      });
+                    }
                   })
               );
             } else if (popularListings[i].vehicleType === "Motorcycle") {
@@ -54,12 +60,15 @@ const PopularListings = (props) => {
                     }
                   )
                   .then((response) => {
-                    // do something with response
-                    vehicles.push({
-                      vehicleType: "Motorcycle",
-                      vehicle: response.data.listing.details,
-                      vehicleId: popularListings[i].vehicleId,
-                    });
+                    if (auth.user.id !== response.data.listing.userId) {
+                      // if the user is logged in and the popular vehicle is of the user then
+                      // we need to discard this popular vehicle
+                      vehicles.push({
+                        vehicleType: "Motorcycle",
+                        vehicle: response.data.listing.details,
+                        vehicleId: popularListings[i].vehicleId,
+                      });
+                    }
                   })
               );
             }
@@ -143,6 +152,9 @@ const PopularListings = (props) => {
               }
               setVehicleCards(vehicleCards);
               setHideComponent(false);
+            } else {
+              // if popular vehicle does not contain vehicles
+              setHideComponent(true);
             }
           });
         }
@@ -150,7 +162,7 @@ const PopularListings = (props) => {
       .catch((err) => {
         console.log(err);
       });
-  }, []);
+  }, [auth]);
 
   // update the size of the window to check for small device
   const handleResize = () => {
