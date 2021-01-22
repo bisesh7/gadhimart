@@ -180,7 +180,7 @@ const ConfirmEmail = (props) => {
           <small className="text-muted">
             We sent an code to your email.
             <br />
-            If you haven't got your reset email,{" "}
+            If you haven't got your email,{" "}
             <a
               href="resendEmail"
               onClick={(e) => {
