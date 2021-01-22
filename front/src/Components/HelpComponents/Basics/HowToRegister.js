@@ -41,8 +41,7 @@ const HowToRegister = () => {
         <p>
           <b>Note:</b> If you haven't recieved your welcome email, please check
           your email's junk ad spam folders. Make sure to add{" "}
-          <b>gadhimart-admin@gmail.com</b> and{" "}
-          <b>gadhimart-noreply@gmail.com</b> to your email's safe list as well.
+          <b>gadhimart@gmail.com</b> to your email's safe list as well.
         </p>
       </div>
     </div>
