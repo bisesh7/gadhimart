@@ -321,7 +321,6 @@ const port = process.env.PORT || 5000;
 if (process.env.NODE_ENV === "production") {
   // Set static folder
   app.use(express.static(path.join(__dirname, "front/build")));
-
   app.get("*", (req, res) => {
     res.sendFile(path.resolve(__dirname, "front", "build", "index.html"));
   });
