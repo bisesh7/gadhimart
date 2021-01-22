@@ -296,18 +296,18 @@ router.post("/", (req, res) => {
                             `,
                           };
 
-                          transporter.sendMail(mailOptions, function (
-                            error,
-                            info
-                          ) {
-                            if (error) {
-                              console.log(error);
-                              return res.status(500).json({
-                                success: false,
-                                msg: "Server Error",
-                              });
+                          transporter.sendMail(
+                            mailOptions,
+                            function (error, info) {
+                              if (error) {
+                                console.log(error);
+                                return res.status(500).json({
+                                  success: false,
+                                  msg: "Server Error",
+                                });
+                              }
                             }
-                          });
+                          );
                         })
                         .catch((err) => {
                           res.status(500).json({
@@ -873,18 +873,18 @@ router.post("/resetPassword", (req, res) => {
                             `,
                               };
 
-                              transporter.sendMail(mailOptions, function (
-                                error,
-                                info
-                              ) {
-                                if (error) {
-                                  console.log(error);
-                                  return res.status(500).json({
-                                    success: false,
-                                    msg: "Server Error",
-                                  });
+                              transporter.sendMail(
+                                mailOptions,
+                                function (error, info) {
+                                  if (error) {
+                                    console.log(error);
+                                    return res.status(500).json({
+                                      success: false,
+                                      msg: "Server Error",
+                                    });
+                                  }
                                 }
-                              });
+                              );
                             })
                             .catch((err) => {
                               res.status(500).json({ msg: "Server Error" });

@@ -17,7 +17,7 @@ router.post("/createLists", (req, res) => {
     if (documents.length) {
       return res
         .status(400)
-        .json({ success: false, msg: "Makes already exists." });
+        .json({ success: false, msg: "Provinces already exists." });
     }
 
     ProvinceWithDistricts.insertMany([
