@@ -277,7 +277,7 @@ router.post("/", (req, res) => {
                                 <span>Your unique code is <b>${uniqueId}</b></span> <br/> <br/>
                             
                                 <div class="center">
-                                  <a href="#" style="color: white;">Confirm</a>  
+                                  <a href="https://www.gadhimart.com/confirmEmail?email=${email.toLowerCase()}&&code=${uniqueId}" style="color: white;">Confirm</a>  
                                 </div><br/><br/>
                                 
                                 <small class="text-muted">Activation link is valid for 24 hours.</small> <br/>
@@ -644,7 +644,7 @@ router.post("/forgotPassword", (req, res) => {
                   <span>Your unique code is <b>${uniqueId}</b></span> <br/> <br/>
               
                   <div class="center">
-                    <a href="#" style="color: white;">Reset</a>  
+                    <a href="https://www.gadhimart.com/resetPassword?email=${email}&&code=${uniqueId}" style="color: white;">Reset</a>  
                   </div><br/><br/>
               
                   <small class="text-muted">Activation link is valid for 24 hours.</small> <br/>
@@ -1130,7 +1130,7 @@ router.post("/resendPasswordResetEmail", (req, res) => {
                   <span>Your unique code is <b>${uniqueId}</b></span> <br/> <br/>
               
                   <div class="center">
-                    <a href="#" style="color: white;">Reset</a>  
+                    <a href="https://www.gadhimart.com/resetPassword?email=${email}&&code=${uniqueId}" style="color: white;">Reset</a>  
                   </div><br/><br/>
               
                   <small class="text-muted">Activation link is valid for 24 hours.</small> <br/>
@@ -1295,7 +1295,7 @@ router.post("/resendConfirmationEmail", (req, res) => {
                 <span>Your unique code is <b>${uniqueId}</b></span> <br/> <br/>
             
                 <div class="center">
-                  <a href="#" style="color: white;">Confirm</a>  
+                  <a href="https://www.gadhimart.com/confirmEmail?email=${email.toLowerCase()}&&code=${uniqueId}" style="color: white;">Confirm</a>  
                 </div><br/><br/>
                 
                 <small class="text-muted">Activation link is valid for 24 hours.</small> <br/>
