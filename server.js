@@ -39,6 +39,7 @@ const provinceWithDistricts = require("./Routes/Api/provinceWithDistricts");
 const filters = require("./Routes/Api/filters");
 // For socketio chat
 const ChatSession = require("./models/ChatSessions");
+const grecaptcha = require("./Routes/Api/grecaptcha");
 
 const session = require("express-session");
 const passport = require("passport");
@@ -151,6 +152,8 @@ app.use("/api/provinceWithDistricts", provinceWithDistricts);
 app.use("/api/filters", filters);
 // Serve the assets files from assets folder
 app.use("/assets", express.static("assets"));
+//Routes for google recpatch
+app.use("/api/grecaptcha", grecaptcha);
 
 io.on("connection", (socket) => {
   socket.on("connection", () => {

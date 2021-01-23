@@ -26,6 +26,36 @@ const RegisterComponent = (props) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [checkingAuth, setCheckingAuth] = useState(false);
 
+  const SITE_KEY = "6LcLajgaAAAAAHRcHlJQtdHiTjxZ80cmNNSu3zb7";
+
+  useEffect(() => {
+    const loadScriptByURL = (id, url, callback) => {
+      const isScriptExist = document.getElementById(id);
+
+      if (!isScriptExist) {
+        var script = document.createElement("script");
+        script.type = "text/javascript";
+        script.src = url;
+        script.id = id;
+        script.onload = function () {
+          if (callback) callback();
+        };
+        document.body.appendChild(script);
+      }
+
+      if (isScriptExist && callback) callback();
+    };
+
+    // load the script by passing the URL
+    loadScriptByURL(
+      "recaptcha-key",
+      `https://www.google.com/recaptcha/api.js?render=${SITE_KEY}`,
+      function () {
+        console.log("Script loaded!");
+      }
+    );
+  }, []);
+
   useEffect(() => {
     // For direct request and reloads
     const checkAuth = () => {
@@ -158,8 +188,72 @@ const RegisterComponent = (props) => {
     setTermsChecked(e.target.checked);
   };
 
+  const submitData = (token) => {
+    // call a backend API to verify reCAPTCHA response
+    axios
+      .post("/api/grecaptcha/verify", {
+        valid: process.env.REACT_APP_API_KEY,
+        recaptchaToken: token,
+      })
+      .then((res) => {
+        setRegistering(false);
+        if (res.data.success) {
+          axios({
+            method: "post",
+            url: "/api/users",
+            data: {
+              name,
+              email,
+              password,
+              terms: termsChecked,
+              valid: process.env.REACT_APP_API_KEY,
+            },
+          })
+            .then((res) => {
+              setRegistering(false);
+              switch (res.data.success) {
+                case true:
+                  props.history.push(`/confirmEmail?email=${email}`);
+                  break;
+                case false:
+                  setAlertMessage(res.data.msg);
+                  break;
+                default:
+                  props.history.push("/home");
+                  break;
+              }
+            })
+            .catch((err) => {
+              if (typeof err.response !== "undefined") {
+                if (err.response.status === 400) {
+                  if (!err.response.data.success) {
+                    setAlertMessage(err.response.data.msg);
+                    setAlertVisible(true);
+                  }
+                } else if (err.response.status === 500) {
+                  setAlertMessage("Server Error");
+                  setAlertVisible(true);
+                  console.log(err);
+                } else {
+                  console.log(err);
+                }
+              }
+              setRegistering(false);
+              setAlertVisible(true);
+            });
+        }
+      })
+      .catch((err) => {
+        if (err.response.status === 400) {
+          setRegistering(false);
+          setAlertMessage("Bad Request");
+          setAlertVisible(true);
+        }
+      });
+  };
+
   // Handle registration
-  const handleRegistrationButton = () => {
+  const handleRegistrationButton = (e) => {
     if (
       nameValid === false ||
       emailValid === false ||
@@ -168,52 +262,15 @@ const RegisterComponent = (props) => {
     ) {
       setShowValidity(true);
     } else {
+      e.preventDefault();
       setRegistering(true);
-
-      axios({
-        method: "post",
-        url: "/api/users",
-        data: {
-          name,
-          email,
-          password,
-          terms: termsChecked,
-          valid: process.env.REACT_APP_API_KEY,
-        },
-      })
-        .then((res) => {
-          setRegistering(false);
-          switch (res.data.success) {
-            case true:
-              props.history.push(`/confirmEmail?email=${email}`);
-              break;
-            case false:
-              setAlertMessage(res.data.msg);
-              break;
-            default:
-              props.history.push("/home");
-              break;
-          }
-        })
-        .catch((err) => {
-          if (typeof err.response !== "undefined") {
-            if (err.response.status === 400) {
-              if (!err.response.data.success) {
-                setAlertMessage(err.response.data.msg);
-                setAlertVisible(true);
-              }
-            } else if (err.response.status === 500) {
-              setAlertMessage("Server Error");
-              setAlertVisible(true);
-              console.log(err);
-            } else {
-              console.log(err);
-            }
-          }
-
-          setRegistering(false);
-          setAlertVisible(true);
-        });
+      window.grecaptcha.ready(() => {
+        window.grecaptcha
+          .execute(SITE_KEY, { action: "submit" })
+          .then((token) => {
+            submitData(token);
+          });
+      });
     }
   };
 
