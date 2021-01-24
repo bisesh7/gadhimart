@@ -38,7 +38,12 @@ import unSavedSVG from "../../icons/starNoColor.svg";
 import Footer from "../Footer";
 
 const host = window.location.hostname;
-const ENDPOINT = "http://" + host + ":5000";
+let ENDPOINT = "";
+if (host === "localhost") {
+  ENDPOINT = "http://" + host + ":5000";
+} else {
+  ENDPOINT = "https://www.gadhimart.com";
+}
 let socket;
 
 const MotorcycleDetailView = (props) => {
