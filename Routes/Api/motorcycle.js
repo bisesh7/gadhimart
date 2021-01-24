@@ -19,6 +19,7 @@ const ProvinceWithDistricts = require("../../models/ProvinceWithDistricts");
 const Motorcycle = require("../../models/Motorcycle");
 const TempFolders = require("../../models/TempFolders");
 const Views = require("../../models/Views");
+const mongoose = require("mongoose");
 
 const validateDetails = (details, motorcycles, provinceWithDistricts) => {
   const error = (possibleErrors) => {
