@@ -27,9 +27,8 @@ import PropagateLoader from "react-spinners/PropagateLoader";
 import ReportUser from "./ReportUser";
 import viewsSVG from "../../icons/visibility.svg";
 import multimediaSVG from "../../icons/multimedia.svg";
+import { getEndPoint } from "../../config";
 
-const host = window.location.hostname;
-const ENDPOINT = "http://" + host + ":5000";
 let socket;
 
 // CSS for the UI Messages, ScrollToBottom does not support style
@@ -77,8 +76,6 @@ const MessageBox = (props) => {
 
     setLoading(true);
     if (typeof props.chatSession.uniqueId !== "undefined") {
-     
-
       axios
         .post("/api/message/getMessage", {
           valid: "VaLid@2342",
@@ -141,7 +138,7 @@ const MessageBox = (props) => {
     // When client restarts the page, socketcontext get defaulted
     // So reassigning socket here.
     if (socket === null) {
-      socket = socketIOClient(ENDPOINT);
+      socket = socketIOClient(getEndPoint());
     }
 
     // Turn off socket after unmounting the component

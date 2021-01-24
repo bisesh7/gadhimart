@@ -12,14 +12,8 @@ import axios from "axios";
 import socketIOClient from "socket.io-client";
 import PopularListings from "./HomeComponents/PopularListings";
 import Footer from "./Footer";
+import { getEndPoint } from "../config";
 
-const host = window.location.hostname;
-let ENDPOINT = "";
-if (host === "localhost") {
-  ENDPOINT = "http://" + host + ":5000";
-} else {
-  ENDPOINT = "https://www.gadhimart.com";
-}
 let socket;
 
 const Home = (props) => {
@@ -64,7 +58,7 @@ const Home = (props) => {
   }, [auth]);
 
   useEffect(() => {
-    socket = socketIOClient(ENDPOINT);
+    socket = socketIOClient(getEndPoint());
 
     // Set the socket in the context
     socketDispatch({
@@ -76,7 +70,7 @@ const Home = (props) => {
       socket.emit("disconnect");
       socket.off();
     };
-  }, [socketDispatch, ENDPOINT]);
+  }, [socketDispatch]);
 
   return (
     <div className="Home">

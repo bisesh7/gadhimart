@@ -52,9 +52,8 @@ import ImageUploader from "./ImageUploader";
 import infoSVG from "../../icons/signs.svg";
 import backButtonSVG from "../../icons/back.svg";
 import nextButtonSVG from "../../icons/next.svg";
+import { getEndPoint } from "../../config";
 
-const host = window.location.hostname;
-const ENDPOINT = "http://" + host + ":5000";
 let socket;
 
 const SellCarComponent = (props) => {
@@ -77,7 +76,7 @@ const SellCarComponent = (props) => {
     // When client restarts the page, socketcontext get defaulted
     // So reassigning socket here.
     if (socket === null) {
-      socket = socketIOClient(ENDPOINT);
+      socket = socketIOClient(getEndPoint());
     }
 
     // Turn off socket after unmounting the component

@@ -24,8 +24,8 @@ import updateSVG from "../../icons/register.svg";
 import deleteSVG from "../../icons/cross.svg";
 import kilometerSVG from "../../icons/speed.svg";
 import motorcycleSVG from "../../icons/motorbiking.svg";
+import { getEndPoint } from "../../config";
 
-const ENDPOINT = "http://localhost:5000/";
 let socket;
 
 const MotorcycleListings = (props) => {
@@ -50,7 +50,7 @@ const MotorcycleListings = (props) => {
     // When client restarts the page, socketcontext get defaulted
     // So reassigning socket here.
     if (socket === null) {
-      socket = socketIOClient(ENDPOINT);
+      socket = socketIOClient(getEndPoint());
     }
 
     // Turn off socket after unmounting the component

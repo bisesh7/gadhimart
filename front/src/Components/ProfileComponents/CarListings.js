@@ -24,8 +24,8 @@ import kilometerSVG from "../../icons/speed.svg";
 import drivetrainSVG from "../../icons/drivetrain.svg";
 import fuelTypeSVG from "../../icons/fuel.svg";
 import carSVG from "../../icons/suv-car.svg";
+import { getEndPoint } from "../../config";
 
-const ENDPOINT = "http://localhost:5000/";
 let socket;
 
 const CarListings = (props) => {
@@ -50,7 +50,7 @@ const CarListings = (props) => {
     // When client restarts the page, socketcontext get defaulted
     // So reassigning socket here.
     if (socket === null) {
-      socket = socketIOClient(ENDPOINT);
+      socket = socketIOClient(getEndPoint());
     }
 
     // Turn off socket after unmounting the component

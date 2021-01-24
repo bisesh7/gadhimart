@@ -27,10 +27,7 @@ import savedCarSVG from "../icons/directions_car-24px.svg";
 import savedSearchesSVG from "../icons/bestSearches.svg";
 import sellSVG from "../icons/sell.svg";
 import logoutSVG from "../icons/logout.svg";
-
-// Backup if user refreshes the page
-const host = window.location.hostname;
-const ENDPOINT = "http://" + host + ":5000";
+import { getEndPoint } from "../config";
 
 const AuthLinks = (props) => {
   // getting the auth from the AuthContext
@@ -54,7 +51,7 @@ const AuthLinks = (props) => {
 
     // If user refreshes the page socket will be
     if (socket === null) {
-      socket = socketIOClient(ENDPOINT);
+      socket = socketIOClient(getEndPoint());
     }
 
     if (auth.isAuthenticated) {

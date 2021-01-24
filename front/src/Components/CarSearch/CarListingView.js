@@ -37,9 +37,8 @@ import fueltypeSVG from "../../icons/fuel.svg";
 import savedSVG from "../../icons/savedStar.svg";
 import unSavedSVG from "../../icons/starNoColor.svg";
 import Footer from "../Footer";
+import { getEndPoint } from "../../config";
 
-const host = window.location.hostname;
-const ENDPOINT = "http://" + host + ":5000";
 let socket;
 
 const CarListingView = (props) => {
@@ -280,7 +279,7 @@ const CarListingView = (props) => {
     // When client restarts the page, socketcontext get defaulted
     // So reassigning socket here.
     if (socket === null) {
-      socket = socketIOClient(ENDPOINT);
+      socket = socketIOClient(getEndPoint());
     }
 
     // Turn off socket after unmounting the component

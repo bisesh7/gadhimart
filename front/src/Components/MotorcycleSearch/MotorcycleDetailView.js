@@ -36,14 +36,8 @@ import fuelTypeSVG from "../../icons/fuel.svg";
 import savedSVG from "../../icons/savedStar.svg";
 import unSavedSVG from "../../icons/starNoColor.svg";
 import Footer from "../Footer";
+import { getEndPoint } from "../../config";
 
-const host = window.location.hostname;
-let ENDPOINT = "";
-if (host === "localhost") {
-  ENDPOINT = "http://" + host + ":5000";
-} else {
-  ENDPOINT = "https://www.gadhimart.com";
-}
 let socket;
 
 const MotorcycleDetailView = (props) => {
@@ -69,7 +63,7 @@ const MotorcycleDetailView = (props) => {
   }, [auth]);
 
   // Get socket
-  const { socketDetail } = useContext(SocketContext);
+  const { socketDetail, socketDispatch } = useContext(SocketContext);
 
   // Connect to socket and back up
   useEffect(() => {
@@ -78,7 +72,12 @@ const MotorcycleDetailView = (props) => {
     // When client restarts the page, socketcontext get defaulted
     // So reassigning socket here.
     if (socket === null) {
-      socket = socketIOClient(ENDPOINT);
+      socket = socketIOClient(getEndPoint());
+      // Set the socket in the context
+      socketDispatch({
+        type: "LOGIN_PASS",
+        socket,
+      });
     }
 
     // Turn off socket after unmounting the component

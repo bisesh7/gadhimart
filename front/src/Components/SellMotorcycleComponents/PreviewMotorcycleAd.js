@@ -25,9 +25,8 @@ import conditionSVG from "../../icons/car-repair.svg";
 import kilometersSVG from "../../icons/speed.svg";
 import ccSVG from "../../icons/cylinder.svg";
 import fuelTypeSVG from "../../icons/fuel.svg";
+import { getEndPoint } from "../../config";
 
-const host = window.location.hostname;
-const ENDPOINT = "http://" + host + ":5000";
 let socket;
 
 const PreviewMotorcycleAd = (props) => {
@@ -48,7 +47,7 @@ const PreviewMotorcycleAd = (props) => {
     // When client restarts the page, socketcontext get defaulted
     // So reassigning socket here.
     if (socket === null) {
-      socket = socketIOClient(ENDPOINT);
+      socket = socketIOClient(getEndPoint());
     }
 
     // Turn off socket after unmounting the component

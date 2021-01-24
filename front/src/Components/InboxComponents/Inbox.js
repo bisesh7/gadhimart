@@ -24,9 +24,8 @@ import "react-confirm-alert/src/react-confirm-alert.css"; // Import css
 import deleteSVG from "../../icons/cross.svg";
 import multimediaSVG from "../../icons/multimedia.svg";
 import viewsSVG from "../../icons/visibility.svg";
+import { getEndPoint } from "../../config";
 
-const host = window.location.hostname;
-const ENDPOINT = "http://" + host + ":5000";
 let socket;
 const Inbox = (props) => {
   useEffect(() => {
@@ -152,7 +151,7 @@ const Inbox = (props) => {
     // When client restarts the page, socketcontext get defaulted
     // So reassigning socket here.
     if (socket === null) {
-      socket = socketIOClient(ENDPOINT);
+      socket = socketIOClient(getEndPoint());
     }
 
     // Turn off socket after unmounting the component

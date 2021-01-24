@@ -48,10 +48,9 @@ import { SocketContext } from "../../Contexts/SocketContext";
 import infoSVG from "../../icons/signs.svg";
 import backButtonSVG from "../../icons/back.svg";
 import nextButtonSVG from "../../icons/next.svg";
+import { getEndPoint } from "../../config";
 
 // Backup if user refreshes the page
-const host = window.location.hostname;
-const ENDPOINT = "http://" + host + ":5000";
 let socket = null;
 
 const SellMotorcycleForm = (props) => {
@@ -72,7 +71,7 @@ const SellMotorcycleForm = (props) => {
 
     // If user refreshes the page socket will be
     if (socket === null) {
-      socket = socketIOClient(ENDPOINT);
+      socket = socketIOClient(getEndPoint());
     }
 
     // When component unmount socket will be off Important
