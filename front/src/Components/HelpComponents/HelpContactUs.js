@@ -8,8 +8,7 @@ const HelpContactUs = (props) => {
       <Help {...props} />
       <Container className="mt-4">
         <strong> You can contact us through:</strong> <br />
-        Phone: 9843776006 (10-5 working days) <br /> Email:
-        gadhimart-contact@gmail.com
+        Phone: 9843776006 (10-5 working days) <br /> Email: gadhimart@gmail.com
       </Container>
     </div>
   );
