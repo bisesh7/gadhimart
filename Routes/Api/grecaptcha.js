@@ -19,7 +19,6 @@ router.post("/verify", (req, res) => {
   var VERIFY_URL = `https://www.google.com/recaptcha/api/siteverify?secret=${SECRET_KEY}&response=${recaptchaToken}`;
 
   axios.post(VERIFY_URL).then((googleResponse) => {
-    console.log(googleResponse.data);
     if (googleResponse.data.success) {
       return res.json({ success: true });
     } else {
