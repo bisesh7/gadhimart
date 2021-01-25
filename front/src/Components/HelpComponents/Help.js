@@ -46,14 +46,14 @@ const Help = (props) => {
     <div>
       <NavbarComponent history={props.history} location={props.location} />
       <Container className="mt-5">
-        <InputGroup style={{ width: "50%" }}>
+        {/* <InputGroup style={{ width: "50%" }}>
           <InputGroupAddon addonType="prepend">🔍</InputGroupAddon>
           <Input
             type="text"
             placeholder="Ask a question or search by keyword"
           />
           <InputGroupAddon addonType="append">🔍</InputGroupAddon>
-        </InputGroup>
+        </InputGroup> */}
         <Nav className="mt-5" tabs>
           <NavItem>
             <NavLink
