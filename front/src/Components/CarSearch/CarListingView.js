@@ -38,6 +38,7 @@ import savedSVG from "../../icons/savedStar.svg";
 import unSavedSVG from "../../icons/starNoColor.svg";
 import Footer from "../Footer";
 import { getEndPoint } from "../../config";
+import { FacebookShareButton, FacebookIcon } from "react-share";
 
 let socket;
 
@@ -484,6 +485,14 @@ const CarListingView = (props) => {
                   : toCapital(carDetails.priceType)}
               </h3>
             </div>
+
+            <FacebookShareButton
+              url={`https://www.gadhimart.com/car/${carListingId}`}
+              quote={carDetails.adTitle}
+              hashtag="#Gadhimart"
+            >
+              <FacebookIcon size={36} />
+            </FacebookShareButton>
 
             {/* Message, Save car */}
             <div className="mt-4">
