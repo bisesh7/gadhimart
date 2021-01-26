@@ -1,4 +1,4 @@
-import React, { Component, useEffect, useContext, useState } from "react";
+import React, { useEffect, useContext } from "react";
 import NavbarComponent from "./HomeComponents/Navbar";
 import Slogan from "./HomeComponents/Slogan";
 import SearchBar from "./HomeComponents/SearchBar";
@@ -13,6 +13,7 @@ import socketIOClient from "socket.io-client";
 import PopularListings from "./HomeComponents/PopularListings";
 import Footer from "./Footer";
 import { getEndPoint } from "../config";
+import HelmetMetaData from "./HelmetMetaData";
 
 let socket;
 
@@ -74,6 +75,7 @@ const Home = (props) => {
 
   return (
     <div className="Home">
+      <HelmetMetaData />
       <NavbarComponent history={props.history} location={props.location} />
       <Slogan />
       <SearchBar history={props.history} />

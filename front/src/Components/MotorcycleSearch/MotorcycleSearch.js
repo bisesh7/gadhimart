@@ -10,6 +10,7 @@ import queryString from "query-string";
 import MotorcycleInformation from "./MotorcycleInformation";
 import MotorcycleFiltersAndSearchResults from "./MotorcyleFiltersAndSearchResults";
 import Footer from "../Footer";
+import HelmetMetaData from "../HelmetMetaData";
 
 const MotorcycleSearch = (props) => {
   const [make, setMake] = useState(props.match.params.make);
@@ -129,8 +130,28 @@ const MotorcycleSearch = (props) => {
     }
   }, [props.location.search]);
 
+  const [makeAndModelIsSet, setMakeAndModelIsSet] = useState(false);
+  const [title, setTitle] = useState("");
+
+  useEffect(() => {
+    if (make.toUpperCase() !== "A" && model.toUpperCase() !== "A") {
+      setMakeAndModelIsSet(true);
+      setTitle(`${make} ${model}s for sale by owners and dealers`);
+    } else if (make.toUpperCase() !== "A" && model.toUpperCase() === "A") {
+      setMakeAndModelIsSet(true);
+      setTitle(`${make}s for sale by owners and dealers`);
+    } else {
+      setMakeAndModelIsSet(false);
+    }
+  }, [make, model]);
+
   return (
     <div>
+      {makeAndModelIsSet ? (
+        <HelmetMetaData title={title} />
+      ) : (
+        <HelmetMetaData />
+      )}
       <UnAuthNavbar
         carListView={true}
         location={props.location}

@@ -38,6 +38,7 @@ import unSavedSVG from "../../icons/starNoColor.svg";
 import Footer from "../Footer";
 import { getEndPoint } from "../../config";
 import ShareComponent from "../CarSearch/ShareComponent";
+import HelmetMetaData from "../HelmetMetaData";
 
 let socket;
 
@@ -298,6 +299,11 @@ const MotorcycleDetailView = (props) => {
         </div>
       ) : (
         <Fragment>
+          <HelmetMetaData
+            title={motorcycleDetail.adTitle}
+            description={motorcycleDetail.adDescription}
+            image={`https://www.gadhimart.com${motorcycleDetail.picturesToBeUploadedMeta[0].fileUrl}`}
+          />
           <Container className="mt-5">
             <Alert color="info" isOpen={alertVisible} toggle={onDismiss}>
               {alertMessage}

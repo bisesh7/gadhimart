@@ -30,7 +30,7 @@ const ShareModal = (props) => {
       <ReactTooltip type="info">
         <span>Share</span>
       </ReactTooltip>
-      <Modal isOpen={modal} toggle={toggle}>
+      <Modal isOpen={modal} toggle={toggle} className="modal-dialog-centered">
         <ModalHeader toggle={toggle}>Share this listing</ModalHeader>
         <ModalBody>
           <ShareComponent

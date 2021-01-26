@@ -21,6 +21,7 @@
     "react-confirm-alert": "^2.6.2",
     "react-dom": "^16.13.1",
     "react-dropzone": "^11.1.0",
+    "react-helmet": "^6.1.0",
     "react-image-crop": "^8.6.5",
     "react-image-gallery": "^1.0.8",
     "react-images-upload": "^1.2.8",
