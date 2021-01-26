@@ -38,7 +38,14 @@ import savedSVG from "../../icons/savedStar.svg";
 import unSavedSVG from "../../icons/starNoColor.svg";
 import Footer from "../Footer";
 import { getEndPoint } from "../../config";
-import { FacebookShareButton, FacebookIcon } from "react-share";
+import {
+  FacebookShareButton,
+  FacebookIcon,
+  EmailShareButton,
+  EmailIcon,
+  WhatsappShareButton,
+  WhatsappIcon,
+} from "react-share";
 
 let socket;
 
@@ -486,13 +493,25 @@ const CarListingView = (props) => {
               </h3>
             </div>
 
-            <FacebookShareButton
-              url={`https://www.gadhimart.com/car/${carListingId}`}
-              quote={carDetails.adTitle}
-              hashtag="#Gadhimart"
-            >
-              <FacebookIcon size={36} />
-            </FacebookShareButton>
+            <div className="d-flex justify-content-center">
+              <FacebookShareButton
+                url={`https://www.gadhimart.com/car/${carListingId}`}
+                quote={carDetails.adTitle}
+                hashtag="#Gadhimart"
+                className="mr-3"
+              >
+                <FacebookIcon size={36} />
+              </FacebookShareButton>
+              <EmailShareButton
+                subject={carDetails.adTitle}
+                body={carDetails.adDescription + " \n Sent via gadhimart"}
+                quote={carDetails.adTitle}
+                hashtag={"#Gadhimart"}
+                className="mr-3"
+              >
+                <EmailIcon size={36} />
+              </EmailShareButton>
+            </div>
 
             {/* Message, Save car */}
             <div className="mt-4">
