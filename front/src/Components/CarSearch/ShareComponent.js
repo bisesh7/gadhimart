@@ -7,10 +7,15 @@ import {
 } from "react-share";
 
 const ShareComponent = (props) => {
+  const url =
+    props.vehicle === "Motorcycle"
+      ? `https://www.gadhimart.com/motorcycle/${props.listingId}`
+      : `https://www.gadhimart.com/car/${props.listingId}`;
+
   return (
     <div className="d-flex justify-content-center">
       <FacebookShareButton
-        url={`https://www.gadhimart.com/car/${props.listingId}`}
+        url={url}
         quote={props.details.adTitle}
         hashtag="#Gadhimart"
         className="mr-3"

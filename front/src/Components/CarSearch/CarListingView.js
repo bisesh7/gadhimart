@@ -486,7 +486,11 @@ const CarListingView = (props) => {
               </h3>
             </div>
 
-            <ShareComponent details={carDetails} listingId={carListingId} />
+            <ShareComponent
+              details={carDetails}
+              listingId={carListingId}
+              vehicle="Car"
+            />
 
             {/* Message, Save car */}
             <div className="mt-4">
