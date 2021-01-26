@@ -25,6 +25,7 @@ import deleteSVG from "../../icons/cross.svg";
 import kilometerSVG from "../../icons/speed.svg";
 import motorcycleSVG from "../../icons/motorbiking.svg";
 import { getEndPoint } from "../../config";
+import ShareModal from "./ShareModal";
 
 let socket;
 
@@ -183,6 +184,13 @@ const MotorcycleListings = (props) => {
                             <div className="mt-1">
                               <img alt="" src={viewsSVG} width="20" />{" "}
                               <span>{views[i]}</span>
+                            </div>
+                            <div className="mt-2">
+                              <ShareModal
+                                details={listings[i].details}
+                                listingId={listings[i]._id}
+                                vehicle="Motorcycle"
+                              />
                             </div>
                           </Col>
                           <Col

@@ -25,6 +25,7 @@ import drivetrainSVG from "../../icons/drivetrain.svg";
 import fuelTypeSVG from "../../icons/fuel.svg";
 import carSVG from "../../icons/suv-car.svg";
 import { getEndPoint } from "../../config";
+import ShareModal from "./ShareModal";
 
 let socket;
 
@@ -187,6 +188,13 @@ const CarListings = (props) => {
                               <span>
                                 {listings[i].carDetails.carFuelTypeSelected}
                               </span>
+                            </div>
+                            <div className="mt-2">
+                              <ShareModal
+                                details={listings[i].carDetails}
+                                listingId={listings[i]._id}
+                                vehicle="Car"
+                              />
                             </div>
                           </Col>
                           <Col

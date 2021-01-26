@@ -436,3 +436,7 @@ input[type="number"] {
 .helpLinks:hover {
   text-decoration: none;
 }
+
+.shareButton:hover {
+  cursor: pointer;
+}
