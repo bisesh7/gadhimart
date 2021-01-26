@@ -37,6 +37,7 @@ import savedSVG from "../../icons/savedStar.svg";
 import unSavedSVG from "../../icons/starNoColor.svg";
 import Footer from "../Footer";
 import { getEndPoint } from "../../config";
+import ShareComponent from "../CarSearch/ShareComponent";
 
 let socket;
 
@@ -314,6 +315,8 @@ const MotorcycleDetailView = (props) => {
                   : toCapital(motorcycleDetail.priceType)}
               </h3>
             </div>
+
+            <ShareComponent details={motorcycleDetail} listingId={listingId} />
 
             {/* Message, Save motorcycle */}
             <div className="mt-4">
