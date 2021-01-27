@@ -652,19 +652,17 @@ router.post("/remove/:listingId", ensureAuthenticated, (req, res) => {
           if (view) {
             promises.push(view.remove());
           }
-
-          Promise.all(promises)
-            .then(() => {
-              return res.json({ success: true });
-            })
-            .catch((err) => {
-              console.log(err);
-              return res
-                .status(500)
-                .json({ success: false, msg: "Server Error" });
-            });
         }
       );
+
+      Promise.all(promises)
+        .then(() => {
+          return res.json({ success: true });
+        })
+        .catch((err) => {
+          console.log(err);
+          return res.status(500).json({ success: false, msg: "Server Error" });
+        });
     })
     .catch((err) => {
       if (err) {
