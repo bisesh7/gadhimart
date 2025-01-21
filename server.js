@@ -64,7 +64,12 @@ const db = config.get("mongoURI");
 
 // Connect to mongo
 mongoose
-  .connect(db)
+  .connect(db, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+    useCreateIndex: true,
+    useFindAndModify: false,
+  })
   .then(console.log("mongo db connected"))
   .catch((err) => {
     console.log(err);
