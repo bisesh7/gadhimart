@@ -1,5 +1,5 @@
 {
-  "mongoURI": "mongodb://gadhimart_user:7-PyY%25ght@www.gadhimart.com:27017/gadhimart_db?authSource=admin&readPreference=primary&appname=MongoDB%20Compass&ssl=false",
+  "mongoURI": "mongodb+srv://bisesh:zuskox-citweM-redhu2@portfolio.ox7qp.mongodb.net/gadhimart?retryWrites=true&w=majority&appName=Portfolio",
   "secret": "mySecret2223",
   "gmailId": "gadhimart@gmail.com",
   "gmailPassword": "g4wg%Tf1",

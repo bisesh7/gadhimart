@@ -38,10 +38,10 @@
     "socket.io-client": "^2.3.0",
     "uuidv4": "^6.2.3"
   },
-  "proxy": "http://localhost:5000/",
+  "proxy": "http://localhost:5001/",
   "secure": false,
   "scripts": {
-    "start": "react-scripts start",
+    "start": "export NODE_OPTIONS=--openssl-legacy-provider && react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"

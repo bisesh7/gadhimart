@@ -64,12 +64,7 @@ const db = config.get("mongoURI");
 
 // Connect to mongo
 mongoose
-  .connect(db, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-    useCreateIndex: true,
-    useFindAndModify: false,
-  })
+  .connect(db)
   .then(console.log("mongo db connected"))
   .catch((err) => {
     console.log(err);
@@ -318,7 +313,7 @@ io.on("connection", (socket) => {
 });
 
 // port number
-const port = process.env.PORT || 5000;
+const port = process.env.PORT || 5001;
 
 // Serve static if in Production
 if (process.env.NODE_ENV === "production") {
